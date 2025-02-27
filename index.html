@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تنظيم المال والمصاريف اليومية</title>
+    <style>
+        /* التنسيقات العامة */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4299e1;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .box {
+            background: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .box h2 {
+            color: #4299e1;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #555;
+            border-radius: 6px;
+            font-size: 0.9em;
+            color: #e0e0e0;
+            background-color: #333;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 60px;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #4299e1;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3182ce;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background: #333;
+            margin: 8px 0;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        li:hover {
+            background-color: #444;
+        }
+
+        .total {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #4299e1;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #444;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress {
+            height: 15px;
+            background-color: #48bb78;
+            text-align: center;
+            color: #ffffff;
+            line-height: 15px;
+            font-size: 0.8em;
+            transition: width 0.3s ease;
+        }
+
+        .completed {
+            color: #48bb78;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .error {
+            color: #e53e3e;
+            font-weight: bold;
+            margin-top: 8px;
+            font-size: 0.8em;
+        }
+
+        .notes {
+            color: #a0a0a0;
+            font-size: 0.8em;
+            margin-top: 4px;
+        }
+
+        .item-details {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        .item-details strong {
+            color: #4299e1;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .account {
+            background: #333;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .account h3 {
+            color: #4299e1;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .account-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .account-actions input {
+            flex: 1;
+            padding: 6px;
+            font-size: 0.8em;
+            background-color: #444;
+            border: 1px solid #555;
+            color: #e0e0e0;
+        }
+
+        .account-actions button {
+            flex: 1;
+            padding: 6px 12px;
+            font-size: 0.8em;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            right: 0;
+            min-width: 100px;
+        }
+
+        .dropdown-content button {
+            width: 100%;
+            text-align: right;
+            padding: 6px 12px;
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .dropdown-content button:hover {
+            background-color: #444;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            color: #a0a0a0;
+        }
+
+        .summary {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 15px;
+            background: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .summary p {
+            margin: 0;
+            font-size: 1em;
+            color: #e0e0e0;
+        }
+
+        .reset-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background-color: #e53e3e;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        .reset-button:hover {
+            background-color: #c53030;
+        }
+    </style>
+</head>
+<body>
+    <button class="reset-button" onclick="resetAll()">تصفير الكل</button>
+    <h1>تنظيم المال والمصاريف اليومية</h1>
+    <div class="container">
+        <!-- قسم الدخل اليومي -->
+        <div class="box">
+            <h2>الدخل اليومي</h2>
+            <input type="number" id="dailyIncomeAmount" placeholder="المبلغ (بالريال)">
+            <textarea id="dailyIncomeNotes" placeholder="ملاحظات"></textarea>
+            <button onclick="addDailyIncome()">إضافة دخل</button>
+            <ul id="dailyIncomeList"></ul>
+        </div>
+
+        <!-- قسم المصاريف اليومية -->
+        <div class="box">
+            <h2>المصاريف اليومية</h2>
+            <input type="number" id="dailyExpenseAmount" placeholder="المبلغ (بالريال)">
+            <textarea id="dailyExpenseNotes" placeholder="ملاحظات"></textarea>
+            <button onclick="addDailyExpense()">إضافة مصروف</button>
+            <ul id="dailyExpensesList"></ul>
+        </div>
+
+        <!-- قسم الأشياء المراد شراؤها -->
+        <div class="box">
+            <h2>الأشياء المراد شراؤها</h2>
+            <input type="text" id="itemName" placeholder="اسم الشيء">
+            <input type="number" id="itemAmount" placeholder="المبلغ المطلوب (بالريال)">
+            <button onclick="addItem()">إضافة شيء</button>
+            <ul id="itemsList"></ul>
+        </div>
+
+        <!-- قسم الحسابات المنعزلة -->
+        <div class="box">
+            <h2>الحسابات المنعزلة</h2>
+            <input type="text" id="accountName" placeholder="اسم الحساب">
+            <button onclick="addAccount()">إضافة حساب</button>
+            <div id="accountsList"></div>
+        </div>
+
+        <!-- قسم النتائج -->
+        <div class="summary">
+            <p>مجموع الدخل: <span id="totalIncome">0</span> ريال</p>
+            <p>مجموع المصاريف: <span id="totalExpenses">0</span> ريال</p>
+            <p>المبلغ الصافي: <span id="netAmount">0</span> ريال</p>
+        </div>
+    </div>
+
+    <script src="add.js"></script>
+</body>
+</html>
